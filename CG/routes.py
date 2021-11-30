@@ -1,7 +1,8 @@
 from CG import app
-from flask import render_template, flash, send_file, redirect, url_for
+from flask import render_template, flash, send_file, session, redirect, url_for
 from CG.scripts import generateFile
 from CG.forms import URLForm
+import os
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -13,40 +14,50 @@ def index():
         url = form.url.data
         res = inputRecieved(url)
         # activate download option
-        if(res=="ERROR"):
-            return render_template('index.html', form=form)
+        if(res == "ERROR"):
+            return indexPage(form)
         else:
-            return redirect(url_for('downloadFile'))
+            session['name'] = res
+            return render_template('index.html', form=URLForm(), isPrepared=True)
     if form.errors != {}:
         for err_msg in form.errors.values():
             flash(f'{err_msg}', category='danger')
-        return render_template('index.html', form=form)
+        return indexPage(form)
 
-    return render_template('index.html', form=form)
+    return indexPage(form)
 
+def indexPage(form):
+    session.pop('name', default=None)
+    return render_template('index.html', form=form, isPrepared=False)
 
 def inputRecieved(URL):
     # calling the getFile function to generate the file
     # with the user data in the post request
     # and enabling the download button
-    res = generateFile.execute(URL)
-    if res != "ERROR":
+    val = generateFile.execute(URL)
+    if val != "ERROR":
         flash("successifully created file", category='success')
-        print(res)
 
     else:
         flash("Error while retrieving data", category='danger')
         # store the urls which caused errors
-    return res
+    return val
+
 
 @app.route("/downloadfile/")
 def downloadFile():
-    return render_template("download.html")
+    # return file here isntead
+    try:
+        if 'name' in session:
+            if(session['name'] != "" and session['name'] != "ERROR"):
+                return send_file(f'.\\outputs\\{session["name"]}_company_group.xlsx')
+        else:
+            flash("Fill the form before visiting this URL", category='danger')
+            return redirect(url_for('index'))
+    except:
+        flash("Error while retrieving file, please try again", category='danger')
+        return redirect(url_for('index'))
 
-@app.route("/download/")
-def download():
-    # return file here
-    return redirect(url_for("index"))
 
 @app.route("/contact/")
 def contact():

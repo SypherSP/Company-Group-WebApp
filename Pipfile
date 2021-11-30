@@ -10,6 +10,7 @@ requests = "*"
 xlsxwriter = "*"
 lxml = "*"
 flask-wtf = "*"
+flask-session = "*"
 
 [dev-packages]
 autopep8 = "*"

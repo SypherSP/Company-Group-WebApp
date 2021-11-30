@@ -38,7 +38,7 @@
         </div>
     </nav>
     <!-- Future Content here -->
-    <div class="container">
+    <div class="container" id="alerts">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}

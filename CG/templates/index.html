@@ -14,7 +14,12 @@ Find group of companies-Sypher Solutions
                 result: </label></h5>
         {{ form.url(class="form-control") }}
         <br>
-        {{form.submit(class="btn btn-lg btn-block btn-primary")}}
+        {{form.submit(class="btn btn-lg btn-primary")}}
     </form>
+    
+    {% if isPrepared %}
+    <br>
+    <a href="{{ url_for('downloadFile') }}" class="btn btn-lg btn-success" target="_blank">Download File</a>
+    {% endif %}
 </div>
 {% endblock %}
