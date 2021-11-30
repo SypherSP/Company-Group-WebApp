@@ -15,6 +15,7 @@ def index():
         res = inputRecieved(url)
         # activate download option
         if(res == "ERROR"):
+            flash('Some ERROR ocured', category='danger')
             return indexPage(form)
         else:
             session['name'] = res
@@ -26,9 +27,11 @@ def index():
 
     return indexPage(form)
 
+
 def indexPage(form):
     session.pop('name', default=None)
     return render_template('index.html', form=form, isPrepared=False)
+
 
 def inputRecieved(URL):
     # calling the getFile function to generate the file
@@ -50,12 +53,29 @@ def downloadFile():
     try:
         if 'name' in session:
             if(session['name'] != "" and session['name'] != "ERROR"):
-                return send_file(f'.\\outputs\\{session["name"]}_company_group.xlsx')
+                directory = os.getcwd()
+                file_path = f'{directory}\\CG\\outputs\\{session["name"]}_company_group.xlsx'
+                file_handle = open(file_path, 'rb')
+
+                def stream_and_remove_file():
+                    yield from file_handle
+                    file_handle.close()
+                    os.remove(file_path)
+
+                return app.response_class(
+                    stream_and_remove_file(),
+                    headers={
+                        "Content-Disposition": f"attachment; filename={session['name']}_company_group.xlsx",
+                        "Content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    }
+                )
+                # return send_file(file_path)
         else:
             flash("Fill the form before visiting this URL", category='danger')
             return redirect(url_for('index'))
-    except:
+    except Exception as e:
         flash("Error while retrieving file, please try again", category='danger')
+        print(e)
         return redirect(url_for('index'))
 
 
