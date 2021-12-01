@@ -54,7 +54,8 @@ def downloadFile():
         if 'name' in session:
             if(session['name'] != "" and session['name'] != "ERROR"):
                 directory = os.getcwd()
-                file_path = f'{directory}\\CG\\outputs\\{session["name"]}_company_group.xlsx'
+                print(directory)
+                file_path = f'{directory}/CG/outputs/{session["name"]}_company_group.xlsx'
                 file_handle = open(file_path, 'rb')
 
                 def stream_and_remove_file():

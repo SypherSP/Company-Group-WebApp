@@ -1,3 +1,4 @@
+import os
 from bs4 import BeautifulSoup
 import requests
 import xlsxwriter
@@ -112,7 +113,9 @@ def writeToFile():
     Function to write the data into an excel file
     '''
     global name
-    workbook = xlsxwriter.Workbook(f'./CG/outputs/{name}_company_group.xlsx')
+    directory = os.getcwd()
+    print(directory)
+    workbook = xlsxwriter.Workbook(f'{directory}/CG/outputs/{name}_company_group.xlsx')
 
     sheet = workbook.add_worksheet()
     sheet.write(0, 0, "Name")
