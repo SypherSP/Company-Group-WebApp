@@ -82,3 +82,7 @@ def downloadFile():
 @app.route("/contact/")
 def contact():
     return render_template('contact.html')
+
+@app.route("/tutorial/")
+def tutorial():
+    return render_template('tutorial.html')

@@ -5,7 +5,7 @@ Find group of companies-Sypher Solutions
 {% endblock %}
 
 {% block body %}
-<br>
+<br><br>
 <div class="container">
     <form action="#" method="POST" class="URLForm" style="color: white;">
         {{ form.hidden_tag() }}
@@ -14,12 +14,12 @@ Find group of companies-Sypher Solutions
                 result: </label></h5>
         {{ form.url(class="form-control") }}
         <br>
-        {{form.submit(class="btn btn-lg btn-primary")}}
+        <div class="text-center">
+            {{form.submit(class="btn btn-lg btn-primary")}}
+            {% if isPrepared %}
+            <a href="{{ url_for('downloadFile') }}" class="btn btn-lg btn-success">Download File</a>
+            {% endif %}
+        </div>
     </form>
-    
-    {% if isPrepared %}
-    <br>
-    <a href="{{ url_for('downloadFile') }}" class="btn btn-lg btn-success">Download File</a>
-    {% endif %}
 </div>
 {% endblock %}
