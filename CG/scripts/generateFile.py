@@ -114,7 +114,6 @@ def writeToFile():
     '''
     global name
     directory = os.getcwd()
-    print(directory)
     workbook = xlsxwriter.Workbook(f'{directory}/CG/outputs/{name}_company_group.xlsx')
 
     sheet = workbook.add_worksheet()
